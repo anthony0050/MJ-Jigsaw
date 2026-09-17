@@ -27,18 +27,12 @@ class JigsawGameScreen extends StatefulWidget {
 
 class _JigsawGameScreenState extends State<JigsawGameScreen> {
   final List<Map<String, String>> mjGallery = [
-    {
-      'title': 'Billie Jean Silhouette',
-      'path': 'assets/mj1.png',
-    },
-    {
-      'title': 'Stage Spotlight',
-      'path': 'assets/mj2.png',
-    },
-    {
-      'title': 'Live Concert Energy',
-      'path': 'assets/mj3.png',
-    },
+    {'title': 'MJ 经典造型 1', 'path': 'assets/mj1.png'},
+    {'title': 'MJ 经典造型 2', 'path': 'assets/mj2.png'},
+    {'title': 'MJ 经典造型 3', 'path': 'assets/mj3.png'},
+    {'title': 'MJ 经典造型 4', 'path': 'assets/mj4.png'},
+    {'title': 'MJ 经典造型 5', 'path': 'assets/mj5.png'},
+    {'title': 'MJ 经典造型 6', 'path': 'assets/mj6.png'},
   ];
 
   int selectedImageIndex = 0;
