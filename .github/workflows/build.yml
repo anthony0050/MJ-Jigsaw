@@ -21,20 +21,14 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Reconstruct Android Platform Configs
-        run: flutter create --project-name mj_jigsaw --platforms=android .
+      - name: Reconstruct Android Config Without Overwriting
+        run: |
+          flutter create --project-name mj_jigsaw --platforms=android . || true
 
       - name: Install Dependencies
         run: flutter pub get
 
       - name: Build APK
-        run: flutter build apk --release
-
-      - name: Upload APK Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+        run: flutter build apk --release --verbose
