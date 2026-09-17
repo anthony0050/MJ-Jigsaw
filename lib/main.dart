@@ -194,7 +194,7 @@ class _JigsawGameScreenState extends State<JigsawGameScreen> {
                     });
                   },
                   child: Container(
-                    margin: const EdgeInsets.horizontal(6),
+                    margin: const EdgeInsets.symmetric(horizontal: 6),
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: isSelected ? Colors.amber : Colors.grey[800],
