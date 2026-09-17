@@ -26,20 +26,21 @@ jobs:
       - name: Install ImageMagick
         run: sudo apt-get update && sudo apt-get install -y imagemagick
 
-      - name: Setup Android Platform & Local Assets
+      - name: Setup Android Platform & Convert Uploaded Assets
         run: |
           rm -rf android
           flutter create . --platforms=android --project-name=mj_jigsaw
 
-          # 创建 assets 目录并下载拼图本地资源
+          # 创建 assets 目录
           mkdir -p assets
-          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop" -o temp1.jpg
-          curl -s -L "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop" -o temp2.jpg
-          curl -s -L "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&auto=format&fit=crop" -o temp3.jpg
 
-          convert temp1.jpg assets/mj1.png
-          convert temp2.jpg assets/mj2.png
-          convert temp3.jpg assets/mj3.png
+          # 将根目录上传的 6 张不同格式图片统一转码成 PNG 放入 assets 目录
+          convert my_mj1.jpeg assets/mj1.png
+          convert my_mj2.jpg assets/mj2.png
+          convert my_mj3.jpg assets/mj3.png
+          convert my_mj4.webp assets/mj4.png
+          convert my_mj5.jpg assets/mj5.png
+          convert my_mj6.jpg assets/mj6.png
 
           # 自动配置 pubspec.yaml 中的 assets 声明
           if ! grep -q "assets:" pubspec.yaml; then
@@ -47,10 +48,13 @@ jobs:
             echo "    - assets/mj1.png" >> pubspec.yaml
             echo "    - assets/mj2.png" >> pubspec.yaml
             echo "    - assets/mj3.png" >> pubspec.yaml
+            echo "    - assets/mj4.png" >> pubspec.yaml
+            echo "    - assets/mj5.png" >> pubspec.yaml
+            echo "    - assets/mj6.png" >> pubspec.yaml
           fi
 
-          # 配置 App Icon
-          convert temp1.jpg -resize 512x512! icon.png
+          # 自动用第一张图片生成桌面图标 App Icon
+          convert my_mj1.jpeg -resize 512x512! icon.png
           cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
           cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
           cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
