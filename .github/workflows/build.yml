@@ -23,16 +23,24 @@ jobs:
         with:
           channel: 'stable'
 
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
+
       - name: Reconstruct Android Platform & Set MJ Icon
         run: |
           rm -rf android
           flutter create . --platforms=android --project-name=mj_jigsaw
-          # 云端自动下载 MJ 图标并覆盖默认 Android 图标
-          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-hdpi/ic_launcher.png
-          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-mdpi/ic_launcher.png
-          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
-          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
-          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+          
+          # 下载图片并用 ImageMagick 转换为标准的 PNG 格式
+          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o temp_icon.jpg
+          convert temp_icon.jpg -resize 512x512! icon.png
+          
+          # 覆盖所有分辨率下的 App Icon
+          cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          cp icon.png android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 
       - name: Install Dependencies
         run: flutter pub get
