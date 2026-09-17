@@ -25,7 +25,7 @@ jobs:
           channel: 'stable'
 
       - name: Reconstruct Android Platform Configs
-        run: flutter create --platforms=android .
+        run: flutter create --project-name mj_jigsaw --platforms=android .
 
       - name: Install Dependencies
         run: flutter pub get
