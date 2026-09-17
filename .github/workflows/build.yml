@@ -23,10 +23,16 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Force Re-create Android Platform
+      - name: Reconstruct Android Platform & Set MJ Icon
         run: |
           rm -rf android
           flutter create . --platforms=android --project-name=mj_jigsaw
+          # 云端自动下载 MJ 图标并覆盖默认 Android 图标
+          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-mdpi/ic_launcher.png
+          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
+          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png
+          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
 
       - name: Install Dependencies
         run: flutter pub get
