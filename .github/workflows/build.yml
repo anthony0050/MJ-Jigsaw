@@ -26,16 +26,31 @@ jobs:
       - name: Install ImageMagick
         run: sudo apt-get update && sudo apt-get install -y imagemagick
 
-      - name: Reconstruct Android Platform & Set MJ Icon
+      - name: Setup Android Platform & Local Assets
         run: |
           rm -rf android
           flutter create . --platforms=android --project-name=mj_jigsaw
-          
-          # 下载图片并用 ImageMagick 转换为标准的 PNG 格式
-          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=512&auto=format&fit=crop" -o temp_icon.jpg
-          convert temp_icon.jpg -resize 512x512! icon.png
-          
-          # 覆盖所有分辨率下的 App Icon
+
+          # 创建 assets 目录并下载拼图本地资源
+          mkdir -p assets
+          curl -s -L "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&auto=format&fit=crop" -o temp1.jpg
+          curl -s -L "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&auto=format&fit=crop" -o temp2.jpg
+          curl -s -L "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=800&auto=format&fit=crop" -o temp3.jpg
+
+          convert temp1.jpg assets/mj1.png
+          convert temp2.jpg assets/mj2.png
+          convert temp3.jpg assets/mj3.png
+
+          # 自动配置 pubspec.yaml 中的 assets 声明
+          if ! grep -q "assets:" pubspec.yaml; then
+            echo "  assets:" >> pubspec.yaml
+            echo "    - assets/mj1.png" >> pubspec.yaml
+            echo "    - assets/mj2.png" >> pubspec.yaml
+            echo "    - assets/mj3.png" >> pubspec.yaml
+          fi
+
+          # 配置 App Icon
+          convert temp1.jpg -resize 512x512! icon.png
           cp icon.png android/app/src/main/res/mipmap-hdpi/ic_launcher.png
           cp icon.png android/app/src/main/res/mipmap-mdpi/ic_launcher.png
           cp icon.png android/app/src/main/res/mipmap-xhdpi/ic_launcher.png
